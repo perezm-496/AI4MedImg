@@ -1,0 +1,157 @@
+% Created 2021-10-05 mar 17:15
+% Intended LaTeX compiler: pdflatex
+\documentclass[presentation]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\institute{Galileo University -- BiomedLab}
+\usetheme{metropolis}
+\setbeamertemplate{frame footer}{\insertshortauthor~\hfill~(\insertshortinstitute)}
+\setbeamerfont{page number in head/foot}{size=\tiny}
+\setbeamercolor{footline}{fg=gray}
+\setbeamertemplate{bibliography item}{\insertbiblabel}
+\usetheme{default}
+\author{M. Alexander Perez}
+\date{Agosto, 2021}
+\title{Introduction to Neural Networks}
+\subtitle{The Perceptron}
+\hypersetup{
+ pdfauthor={M. Alexander Perez},
+ pdftitle={Introduction to Neural Networks},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 27.1 (Org mode 9.3)}, 
+ pdflang={Spanish}}
+\begin{document}
+
+\maketitle
+\begin{frame}{Outline}
+\tableofcontents
+\end{frame}
+
+
+\section{Introduction to Neural Networks}
+\label{sec:org8573100}
+
+\subsection{Pitt Neuron}
+\label{sec:orgd45b647}
+
+\begin{frame}[label={sec:org59f7dd7}]{Objective}
+Our grand objective is the idea of \alert{strong AI}. Create a simulation of a single neuron, a biological one, and join \(10^{11}\) of them and get something like the human brain. Of course this is an objective from which we are very far away, at least for now (2021).
+\end{frame}
+
+\begin{frame}[label={sec:org019e80e}]{Our Model}
+But many scientist got inspired by the human brain and the idea of the neuron. One of the great principles that many neuroscience help to discover is that of plasticity. We can say that the brain doesn't build new neurons; but changes the connection between the neurons to learn something.
+\end{frame}
+
+\begin{frame}[label={sec:org1e799ed}]{Hebb's Rule}
+Another basic principle from the human brain is the Hebb's Rule, although I think Freud write something about this before. Hebb's rule is simple: \alert{"Neurons that fire together wire together."} If you receive an stimulus like a song, when something sad happens, both set of neurons fire together. The ones that make you feel bad and the ones that process the sound of the song. Next time you listen to the song you get sad.
+\end{frame}
+
+\begin{frame}[label={sec:org11b11e9}]{Simple Model: McCullochg and Pitts Neuron}
+A simple neuron model is based on the following:
+
+\begin{itemize}
+\item \(x_1, x_2, \dots, x_n\) the set of inputs.
+\item \(w_1, w_2, \dots, w_n\) the set of weights.
+\item \(h(t)\) an activation function, this decides if the neuron fires or not for a given input.
+\end{itemize}
+
+The output of the neuron is modeled by:
+\[
+  y = h(w_1 \, x_1 +w_2 \, x_2 + \cdots + x_n \, w_n).
+\]
+
+Originally the Heaviside function was used as an activation function: 
+\[
+  h(t) = \begin{cases}
+    1 & t > 0 \\
+    0 & t \leq 0
+  \end{cases}.
+\]
+\end{frame}
+
+\subsection{Neural Network}
+\label{sec:org7ed5849}
+
+\begin{frame}[label={sec:orgef4195e}]{Basic Scheme of Neural Networks}
+As you might imagined a single neuron is not that interesting. So we use many of them. The next step is how we make them learn something (recall the basics expectations of learning). Our approach is the one of supervised learning:
+
+\alert{Change the weights of the neurons so the output is more like the one we want.}
+
+The first type of neural network is a single layer neural network called  \alert{Perceptron}.
+\end{frame}
+
+\subsection{How should we change the weights?}
+\label{sec:org5eb3299}
+
+
+
+
+\begin{frame}[label={sec:org32c908c}]{Examples}
+In a supervised learning problem, in particular classification, we have:
+
+\begin{itemize}
+\item A set of examples: \((\mathbf{x}_i, t_i)\).
+\begin{itemize}
+\item \(\mathbf{x}_i = (x_i^1, x_i^2, \dots, x_i^m)\) is the feature vector.
+\item \(t_i\) is the target value, usually encoded in a one hot vector i.e.:
+\end{itemize}
+\[
+    t_i = (t_i^1, t_i^2, \dots,t_i^n).
+  \]
+Here if the example \(\mathbf{x}_i\) is of the class \(k\) then \(t_i^k = 1\) and \(t_j^k = 0\) for \(j \neq k\).
+\end{itemize}
+\end{frame}
+
+\begin{frame}[label={sec:org4a48733}]{The Neural Network}
+\begin{itemize}
+\item A neural network, that is a set of neurons in the case of the perceptron \(n\) neurons, one for each input.
+\begin{itemize}
+\item What characterizes the neural network is the weights \(w_ij\).
+\item The output is a vector that we calculate as:
+\end{itemize}
+\[
+    \mathbf{y} = \mathbf{h} \left( w \, \mathbf{x} \right).
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}[label={sec:org9853deb}]{The Loss Function}
+\begin{itemize}
+\item Our objective is to make the \(\mathbf{y}\) equal to the \(\mathbf{t}\) so we make a change proportional to the error:
+\[
+     \Delta w_{ij} = - (y^i - t^i) \, x^j.
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}[label={sec:org4a1135c}]{The Update Algorithm}
+\begin{itemize}
+\item We make several iterations altering the weights, trying to get a better approximation, at each iteration we do:
+\[
+    w_{ij} \leftarrow w_{ij} - \alpha (y^i - t^i) \, x^j.
+  \]
+The value \(\alpha\) is called the learning rate and it controls how much will change the weights in each iteration. We will see his effect on a notebook.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[label={sec:org8ab04fd}]{Implementations}
+\begin{itemize}
+\item Numpy
+\item Torch
+\item Tensorflow
+\end{itemize}
+\end{frame}
+\end{document}
